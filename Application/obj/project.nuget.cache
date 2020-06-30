@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "+dTGfogjgj4Ao51StP0hUKSD7RYB6s+UdD2zegKAn9PPP2y0mdIbji1u3RqkUuo6omAHJG8Rxuk4bvfnoQch0A==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Nevena\\source\\repos\\Spain\\Application\\Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Nevena\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
+  ],
+  "logs": []
+}
