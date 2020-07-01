@@ -2,6 +2,7 @@
 using Application.Queries;
 using Application.Searches;
 using DataAccess;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace Implementation.Queries
 
         public PagedResponse<GetPostDto> Execute(PostSearch search)
         {
-            var query = _context.Posts.AsQueryable();
+            var query = _context.Posts.Include(p=>p.User).Include(p=>p.Comments).Include(p=>p.Picture).Include(p=>p.Likes).Include(p=>p.Category).AsQueryable();
 
             if (!string.IsNullOrEmpty(search.UserName) || !string.IsNullOrWhiteSpace(search.UserName))
             {

@@ -2,8 +2,10 @@
 using Application.Exceptions;
 using Application.Queries;
 using DataAccess;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Implementation.Queries
@@ -23,7 +25,7 @@ namespace Implementation.Queries
 
         public GetPictureDto Execute(int request)
         {
-            var query = _context.Pictures.Find(request);
+            var query = _context.Pictures.Include(p => p.Posts).Where(p => p.Id == request).FirstOrDefault();
 
             if (query == null)
                 throw new SearchEntityNotFound("Picture");
@@ -32,6 +34,8 @@ namespace Implementation.Queries
                 Id = query.Id,
                 Alt = query.Alt,
                 Route = query.Route
+                
+                
                 
             };
         }

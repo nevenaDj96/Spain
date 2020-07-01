@@ -8,6 +8,8 @@ using Application;
 using Application.Commands;
 using Application.DataTransfer;
 using Application.Exceptions;
+using Application.Queries;
+using Application.Searches;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +19,7 @@ namespace Spain.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   
+
     public class PictureController : ControllerBase
     {
         private readonly IApplicationActor _actor;
@@ -30,22 +32,52 @@ namespace Spain.Controllers
         }
         // GET: api/<PictureController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get(
+            [FromQuery] PictureSearch search,
+            [FromServices] IGetPicturesQuery query
+            )
         {
-            return new string[] { "value1", "value2" };
+
+            try
+            {
+                var pics = _executor.ExecuteQuery(query, search);
+                return StatusCode(200, pics);
+            }
+            catch (SearchEntityNotFound e)
+            {
+                return StatusCode(404, e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         // GET api/<PictureController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id}", Name = "Get Picture")]
+        public IActionResult Get(
+               [FromServices] IGetPictureQuery query, int id
+                    )
         {
-            return "value";
+            try
+            {
+                return Ok(_executor.ExecuteQuery(query, id));
+            }
+
+            catch (SearchEntityNotFound e)
+            {
+                return StatusCode(404, e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         // POST api/<PictureController>
         [HttpPost]
 
-        public IActionResult Post([FromServices] ICreatePictureCommand command,[FromForm] UploadPictureDto p)
+        public IActionResult Post([FromServices] ICreatePictureCommand command, [FromForm] UploadPictureDto p)
         {
             try
             {
@@ -73,17 +105,18 @@ namespace Spain.Controllers
             {
                 return StatusCode(404, e.Message);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
         }
 
         // PUT api/<PictureController>/5
-        [HttpPut("{id}")]
-        public IActionResult Put([FromServices] IEditPictureCommand command, [FromForm] UploadPictureDto p,int id)
+        [HttpPut("{id}", Name = "Edit Picture")]
+        public IActionResult Put([FromServices] IEditPictureCommand command,
+            [FromForm] UploadPictureDto p, int id)
         {
-            p.Id=id;
+            p.Id = id;
             try
             {
                 var guid = Guid.NewGuid();
@@ -99,7 +132,7 @@ namespace Spain.Controllers
                 }
                 var dto = new CreatePictureDto
                 {
-                    Id=p.Id,
+                    Id = p.Id,
                     Alt = p.Alt,
                     Route = newFileName
                 };
@@ -118,22 +151,28 @@ namespace Spain.Controllers
         }
 
         // DELETE api/<PictureController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{id}", Name = "Delete Picture")]
+
+        public IActionResult Delete(int id,
+            [FromServices] IDeletePictureCommand command
+            )
         {
+            _executor.ExecuteCommand(command, id);
+            return StatusCode(200);
+
         }
-    }
 
 
 
-    public class UploadPictureDto
-    {
+        public class UploadPictureDto
+        {
 
-        public int Id { get; set; }
-        [Required]
-        public string Alt { get; set; }
-        [Required]
-        public IFormFile Image { get; set; }
+            public int Id { get; set; }
+            [Required]
+            public string Alt { get; set; }
+            [Required]
+            public IFormFile Image { get; set; }
 
+        }
     }
 }

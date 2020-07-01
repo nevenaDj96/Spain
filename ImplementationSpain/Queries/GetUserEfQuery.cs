@@ -3,8 +3,10 @@ using Application.Exceptions;
 using Application.Queries;
 using DataAccess;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Implementation.Queries
@@ -23,7 +25,7 @@ public GetUserEfQuery(Context context)
 
         public GetUserDto Execute(int request)
         {
-            var query = _context.Users.Find(request);
+            var query = _context.Users.Include(u => u.Role).Where(u => u.Id == request).FirstOrDefault();
 
             if (query == null)
                 throw new SearchEntityNotFound("User");

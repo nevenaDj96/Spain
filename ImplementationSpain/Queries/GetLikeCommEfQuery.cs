@@ -2,8 +2,10 @@
 using Application.Exceptions;
 using Application.Queries;
 using DataAccess;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Implementation.Queries
@@ -23,7 +25,7 @@ namespace Implementation.Queries
 
             public GetLikeCommDto Execute(int request)
             {
-                var query = _context.LikeComms.Find(request);
+                var query = _context.LikeComms.Include(c=>c.Comment).Include(c=>c.User).Where(c=>c.Id == request).FirstOrDefault();
 
                 if (query == null)
                     throw new SearchEntityNotFound("LikeComm");

@@ -7,6 +7,7 @@ using FluentValidation;
 using Implementation.Validators;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Implementation.Commands.UserEfCommands
@@ -30,10 +31,21 @@ namespace Implementation.Commands.UserEfCommands
 
         public void Execute( CreateUserDto request)
         {
-            _validator.ValidateAndThrow(request);
 
             var user = _context.Users.Find(request.Id);
-              if(user==null)
+
+            if (user.UserName.ToLower() != request.UserName.ToLower().Trim())
+            {
+                if (_context.Users.Any(p => p.UserName.ToLower() == request.UserName.ToLower().Trim()))
+                    throw new EntityAlreadyExistsException("User with that username");
+
+            }
+            if (user.Email.ToLower() != request.Email.ToLower().Trim())
+            {
+                if (_context.Users.Any(p => p.Email.ToLower() == request.Email.ToLower().Trim()))
+                    throw new EntityAlreadyExistsException("User with that e-mail");
+            }
+             if (user==null)
                {
                    throw new EntityNotFoundException(request.Id, typeof(User));
               }

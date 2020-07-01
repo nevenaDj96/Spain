@@ -67,4 +67,9 @@ C:\Users\Nevena\source\repos\Spain\Spain\bin\Debug\netcoreapp3.1\Microsoft.AspNe
 C:\Users\Nevena\source\repos\Spain\Spain\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
 C:\Users\Nevena\source\repos\Spain\Spain\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\Nevena\source\repos\Spain\Spain\obj\Debug\netcoreapp3.1\Spain.csproj.CoreCompileInputs.cache
+C:\Users\Nevena\source\repos\Spain\Spain\obj\Debug\netcoreapp3.1\Spain.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Nevena\source\repos\Spain\Spain\obj\Debug\netcoreapp3.1\Spain.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Nevena\source\repos\Spain\Spain\bin\Debug\netcoreapp3.1\Microsoft.OpenApi.dll
+C:\Users\Nevena\source\repos\Spain\Spain\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Nevena\source\repos\Spain\Spain\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Nevena\source\repos\Spain\Spain\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll

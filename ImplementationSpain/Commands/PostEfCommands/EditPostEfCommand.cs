@@ -38,7 +38,7 @@ namespace Implementation.Commands.PostEfCommands
                 if (post == null)
             {
 
-                    throw new EntityNotFoundException(request.Id, typeof(Picture));
+                    throw new EntityNotFoundException(request.Id, typeof(Post));
             }
 
             post.Heading = request.Heading;

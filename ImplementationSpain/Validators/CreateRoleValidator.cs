@@ -13,7 +13,7 @@ namespace Implementation.Validators
         public CreateRoleValidator(Context context)
         {
             RuleFor(x => x.Name).NotEmpty();
-            RuleFor(x => x.Id).NotEmpty();
+     
         }
 
     }

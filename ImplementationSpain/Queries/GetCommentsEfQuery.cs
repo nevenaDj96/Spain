@@ -42,12 +42,13 @@ namespace Implementation.Queries
                 }
                 query = query.Where(c => c.Text.ToLower().Contains(search.Text.ToLower()));
             }
-            return query.Include(c => c.User).Select(c => new GetCommentDto
+            return query.Include(c => c.User).Include(c=>c.Post).Select(c => new GetCommentDto
             {
                 Id = c.Id,
                 Text = c.Text,
                 Heading = c.Post.Heading,
                 UserName = c.User.UserName,
+                
             }).ToList();
 
         }

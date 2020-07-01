@@ -14,7 +14,7 @@ namespace Implementation.Validators
 
         public CreateLikeValidator(Context context)
         {
-            RuleFor(x => x.Id).NotEmpty();
+        
 
             RuleFor(x => x.PostId)
                 .NotEmpty()

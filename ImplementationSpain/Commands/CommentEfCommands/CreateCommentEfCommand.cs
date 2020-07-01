@@ -33,11 +33,8 @@ namespace Implementation.Commands.CommentEfCommands
             {
                 Text = request.Text,
                 UserId = request.UserId,
-                PostId = request.PostId,
-                CreatedAt = DateTime.Now,
-                IsDeleted = false,
-                IsActive = true,
-                ModifiedAt = null
+                PostId = request.PostId
+            
             };
 
             _context.Comments.Add(comment);

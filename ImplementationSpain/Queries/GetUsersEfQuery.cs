@@ -2,6 +2,7 @@
 using Application.Queries;
 using Application.Searches;
 using DataAccess;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,12 +50,15 @@ namespace Implementation.Queries
                 CurrentPage = search.PageNumber,
                 ItemsPerPage = search.PerPage,
                 TotalCount = query.Count(),
-                Items = query.Skip(skipCount).Take(search.PerPage).Select(x => new GetUserDto
+                Items = query.Skip(skipCount).Take(search.PerPage).Include(x=>x.Role).Select(x => new GetUserDto
                 {
                     Id = x.Id,
                     UserName = x.UserName,
                     LastName = x.LastName,
                     FirstName = x.FirstName,
+                    Email = x.Email,
+                    Name = x.Role.Name
+
 
                 }).ToList()
             };

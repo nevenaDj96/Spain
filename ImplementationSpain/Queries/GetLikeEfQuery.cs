@@ -2,8 +2,10 @@
 using Application.Exceptions;
 using Application.Queries;
 using DataAccess;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Implementation.Queries
@@ -23,7 +25,7 @@ namespace Implementation.Queries
 
         public GetLikeDto Execute(int request)
         {
-            var query = _context.Likes.Find(request);
+            var query = _context.Likes.Include(l=>l.User).Include(l=>l.Post).Where(l=>l.Id ==request).FirstOrDefault();
 
             if (query == null)
                 throw new SearchEntityNotFound("Like");
@@ -31,7 +33,9 @@ namespace Implementation.Queries
             {
                 Id = query.Id,
                 UserName = query.User.UserName,
-                Heading = query.Post.Heading
+                Heading =query.Post.Heading,
+                Text = query.Post.Text
+
                 
 
             };

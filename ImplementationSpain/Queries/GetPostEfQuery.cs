@@ -23,7 +23,7 @@ namespace Implementation.Queries
         }
         public GetPostDto Execute(int request)
         {
-            var query = _context.Posts.Include(p => p.User).Where(p => p.Id == request).FirstOrDefault();
+            var query = _context.Posts.Include(p => p.User).Include(p=>p.Comments).Include(p=>p.Picture).Include(p=>p.Category).Where(p => p.Id == request).FirstOrDefault();
 
             if (query == null)
                 throw new SearchEntityNotFound("Post");
@@ -33,8 +33,8 @@ namespace Implementation.Queries
                 Id = query.Id,
                 UserName = query.User.UserName,
                 Heading = query.Heading,
-                Text = query.Text
-
+                Text = query.Text,
+                City = query.Category.City
 
             };
         }

@@ -13,7 +13,6 @@ namespace Implementation.Validators
 
         public CreateLikeCommValidator(Context context)
         {
-            RuleFor(x => x.Id).NotEmpty();
 
             RuleFor(x => x.UserId).NotEmpty()
                 .NotEmpty()

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application;
+using Application.Commands;
+using Application.DataTransfer;
 using Application.Exceptions;
 using Application.Queries;
 using Application.Searches;
@@ -29,7 +31,7 @@ namespace Spain.Controllers
 
 
         // GET: api/<CommentController>
-        [HttpGet]
+        [HttpGet(Name ="Get comments")]
         public IActionResult Get(
             [FromServices] IGetCommentsQuery query,
             [FromQuery] CommentSearch search
@@ -51,28 +53,72 @@ namespace Spain.Controllers
         }
 
         // GET api/<CommentController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id}", Name ="Get Comment")]
+        public IActionResult Get(
+            [FromServices] IGetCommentQuery query, int id)
         {
-            return "value";
+            try
+            {
+                var comm = _executor.ExecuteQuery(query, id);
+                return StatusCode(200, comm);
+            }
+            catch (SearchEntityNotFound e)
+            {
+
+                return StatusCode(404, e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         // POST api/<CommentController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost(Name ="Create comment")]
+        public void Post([FromBody] CreateCommentDto dto,
+            [FromServices] ICreateCommentComand command)
         {
+            _executor.ExecuteCommand(command, dto);
         }
+
 
         // PUT api/<CommentController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{id}", Name = "Edit Comment")]
+        public IActionResult Put(
+           [FromServices] IEditCommentCommand command,
+           [FromBody] CreateCommentDto dto, int id
+           )
         {
+            dto.Id = id;
+            try
+            {
+
+                _executor.ExecuteCommand(command, dto);
+                return StatusCode(201);
+
+
+            }
+            catch (EntityAlreadyExistsException e)
+            {
+                return StatusCode(404, e.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
         }
 
+
         // DELETE api/<CommentController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{id}", Name = "Delete comment")]
+        public IActionResult Delete(int id,
+            [FromServices] IDeleteCommentCommand command
+            )
         {
+            _executor.ExecuteCommand(command, id);
+            return StatusCode(200);
+
         }
     }
 }

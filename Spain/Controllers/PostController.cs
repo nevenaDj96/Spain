@@ -30,21 +30,32 @@ namespace Spain.Controllers
         }
 
         // GET: api/PostController
-        [HttpGet]
+        [HttpGet(Name ="Get Posts")]
         public IActionResult Get(
             [FromQuery] PostSearch search,
             [FromServices] IGetPostsQuery query            
             )
         {
+            try
+            {
+                //return Ok(_executor.ExecuteQuery(query, search));
+                var posts = _executor.ExecuteQuery(query, search);
+                return StatusCode(200, posts);
+            }
+            catch (SearchEntityNotFound e)
+            {
 
-            return Ok(_executor.ExecuteQuery(query, search));
-            //var posts=_executor.ExecuteQuery(query, search);
-            // return StatusCode(200,posts);
+                return StatusCode(404, e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         // GET: api/PostController/5
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name="Get Post")]
         public IActionResult Get(
             [FromServices] IGetPostQuery query,int id)
         {
@@ -65,7 +76,7 @@ namespace Spain.Controllers
         }
 
         // POST: api/PostController
-        [HttpPost]
+        [HttpPost (Name ="Create Post")]
         public void Post([FromBody] CreatePostDto dto,
             [FromServices] ICreatePostCommand command)
         {
@@ -73,15 +84,40 @@ namespace Spain.Controllers
         }
 
         // PUT api/<PostController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{id}", Name ="Edit Post")]
+        public IActionResult Put(
+            [FromServices] IEditPostCommand command,
+            [FromBody] CreatePostDto dto, int id
+            )
         {
+            dto.Id = id;
+            try { 
+
+            _executor.ExecuteCommand(command, dto);
+            return StatusCode(201);
+
+
+        }
+            catch (EntityAlreadyExistsException e)
+            {
+                return StatusCode(404, e.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
         }
 
         // DELETE api/<PostController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{id}", Name ="Delete post")]
+        public IActionResult Delete(int id,
+            [FromServices] IDeletePostCommand command
+            )
         {
+            _executor.ExecuteCommand(command, id);
+            return StatusCode(200);
+
         }
     }
 }

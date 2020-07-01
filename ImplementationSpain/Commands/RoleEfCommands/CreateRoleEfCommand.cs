@@ -32,11 +32,8 @@ namespace Implementation.Commands.RoleEfCommands
             var role = new Role
 
             {
-                Name = request.Name,
-                CreatedAt = DateTime.Now,
-                IsDeleted = false,
-                IsActive = true,
-                ModifiedAt = null   
+                Name = request.Name
+           
 
             };
 

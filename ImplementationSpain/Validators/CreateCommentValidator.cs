@@ -17,7 +17,7 @@ namespace Implementation.Validators
             RuleFor(x => x.Text).NotEmpty()
                 .MaximumLength(30);
 
-            RuleFor(x => x.Id).NotEmpty()
+            RuleFor(x => x.PostId).NotEmpty()
                 .Must(id => context.Posts.Any(x => x.Id == id))
                 .WithMessage("Posts doesnt exist");
 
