@@ -240,7 +240,7 @@ namespace Spain
             app.UseStaticFiles();
 
             app.UseAuthorization();
-
+            app.UseAuthentication();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
