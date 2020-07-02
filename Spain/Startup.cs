@@ -133,6 +133,7 @@ namespace Spain
             });
 
             services.AddTransient<IUseCaseLogger, DatabaseUseCaseLogger>();
+            services.AddTransient<IUseCaseLogger, ConsoleUseCaseLogger>();
 
             services.AddTransient<UseCaseExecutor>();
             services.AddTransient<CreateUserValidator>();
@@ -239,8 +240,9 @@ namespace Spain
 
             app.UseStaticFiles();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
